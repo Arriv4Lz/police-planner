@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ติวตำรวจอำนวยการ 69 - Study Planner</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Noto Sans Thai', 'Inter', system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(at 10% 10%, rgba(125, 211, 252, 0.35) 0px, transparent 50%),
+        radial-gradient(at 88% 12%, rgba(196, 181, 253, 0.35) 0px, transparent 48%),
+        radial-gradient(at 75% 78%, rgba(167, 243, 208, 0.28) 0px, transparent 52%),
+        radial-gradient(at 15% 85%, rgba(253, 230, 138, 0.22) 0px, transparent 50%),
+        #eef2f9;
+      background-attachment: fixed;
+      color: #0f172a;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.62);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.28s ease;
+    }
+    .glass-card:hover {
+      box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    }
+    .glass-header {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.75);
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+    }
+    .glass-hero {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.84), rgba(49, 46, 129, 0.78));
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 14px 40px rgba(30, 27, 75, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+    .glass-modal {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    }
+    .smooth-btn {
+      transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .smooth-btn:active {
+      transform: scale(0.98);
+    }
+    .ep-row {
+      transition: background-color 0.22s ease, transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .ep-row:hover {
+      background-color: rgba(255, 255, 255, 0.65);
+    }
+    .ep-row:active {
+      transform: scale(0.995);
+    }
+    .ep-leaving {
+      opacity: 0 !important;
+      transform: translateX(18px) scale(0.98) !important;
+      max-height: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      border-width: 0 !important;
+      overflow: hidden !important;
+      pointer-events: none;
+      transition: all 0.34s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    }
+    .progress-smooth {
+      transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      animation: fadeSlideUp 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .drawer-collapse {
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-8px);
+      margin-top: 0;
+      padding-top: 0;
+      border-top-width: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transition:
+        max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.32s ease,
+        transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+        margin-top 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+        padding-top 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .drawer-collapse.is-open {
+      max-height: 520px;
+      opacity: 1;
+      transform: translateY(0);
+      margin-top: 1rem;
+      padding-top: 0.875rem;
+      border-top-width: 1px;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased pb-14">
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden glass-hero text-white text-xs sm:text-sm font-medium px-4 py-2.5 rounded-2xl shadow-lg animate-in">
+    <span id="toastMsg">บันทึกแล้ว</span>
+  </div>
+
+  <!-- Header -->
+  <header class="glass-header sticky top-0 z-30">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">ติวตำรวจอำนวยการ 69</h1>
+          <p id="headerDeadlineLabel" class="text-xs text-slate-500">แผนอ่านแยกตามวิชา • จบภายใน 20 พ.ย. 2569</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="openImportBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition">
+          วางข้อมูลเพิ่ม
+        </button>
+        <button id="openResetBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+          ล้างการติ๊ก
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-5 space-y-5">
+    <!-- Overall Course Progress (All Subjects) -->
+    <section class="glass-hero text-white rounded-3xl p-4 sm:p-5 animate-in">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div class="text-xs font-medium text-indigo-200">ภาพรวมทั้งคอร์ส (ทุกวิชารวมกัน)</div>
+          <div class="flex items-baseline gap-2.5 mt-0.5 flex-wrap">
+            <span id="overallDoneText" class="text-xl sm:text-2xl font-bold tabular-nums">ติวไปแล้ว 185 / 254 ตอน</span>
+            <span id="overallPctBadge" class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-bold tabular-nums">72.8%</span>
+          </div>
+        </div>
+        <button id="toggleAllSubjectsBtn" type="button" class="self-start sm:self-center px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition shrink-0">
+          ดูสรุปทุกวิชา (9 หมวด)
+        </button>
+      </div>
+      <div class="w-full bg-white/15 rounded-full h-2.5 mt-3 overflow-hidden">
+        <div id="overallProgressBar" class="bg-emerald-400 h-2.5 rounded-full progress-smooth" style="width: 72.8%"></div>
+      </div>
+      <div id="allSubjectsDrawer" class="drawer-collapse border-white/15 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2"></div>
+    </section>
+
+    <!-- Top 4 KPI Cards -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div class="glass-card rounded-2xl p-4 hover:-translate-y-0.5">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-xs font-medium text-slate-500">เหลืออีกทั้งหมด</span>
+          <span class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 text-[11px] font-bold">ตอน</span>
+        </div>
+        <div id="kpiRemainingEps" class="text-2xl sm:text-3xl font-bold text-slate-900 tabular-nums">69 ตอน</div>
+        <p id="kpiEpsSub" class="text-xs text-slate-500 mt-1 tabular-nums">อ่านแล้ว 0 / 69 ตอน</p>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 hover:-translate-y-0.5">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-xs font-medium text-slate-500">อ่านได้แล้ว</span>
+          <span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[11px] font-bold">%</span>
+        </div>
+        <div id="kpiPercent" class="text-2xl sm:text-3xl font-bold text-emerald-600 tabular-nums">0%</div>
+        <div class="w-full bg-slate-100 rounded-full h-2 mt-2.5 overflow-hidden">
+          <div id="kpiProgressBar" class="bg-emerald-500 h-2 rounded-full progress-smooth" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 hover:-translate-y-0.5">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-xs font-medium text-slate-500">เวลาคอร์สที่เหลือ</span>
+          <span class="px-2 py-0.5 rounded-md bg-rose-50 text-rose-600 text-[11px] font-bold">รวม</span>
+        </div>
+        <div id="kpiCourseRemaining" class="text-lg sm:text-2xl font-bold text-slate-900 tabular-nums">0 ชม. 0 นาที</div>
+        <p id="kpiCourseDoneSub" class="text-xs text-slate-500 mt-1 tabular-nums">อ่านไปแล้ว 0 ชม. 0 นาที</p>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 hover:-translate-y-0.5">
+        <div class="flex items-center justify-between mb-1.5">
+          <span id="kpiFocusDayLabel" class="text-xs font-medium text-slate-500">วันนี้อ่านไปแล้ว</span>
+          <span class="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-600 text-[11px] font-bold">รายวัน</span>
+        </div>
+        <div id="kpiTodayStudied" class="text-lg sm:text-2xl font-bold text-indigo-600 tabular-nums">0 ชม. 0 นาที</div>
+        <p id="kpiTodayRemainingSub" class="text-xs text-slate-500 mt-1 tabular-nums">เหลืออีก 0 ชม. 0 นาที</p>
+      </div>
+    </section>
+
+    <!-- Subject Progress & Filter Strip -->
+    <section class="glass-card rounded-2xl p-4 hover:-translate-y-0.5">
+      <div class="flex items-center justify-between mb-2.5">
+        <h2 class="text-xs sm:text-sm font-bold text-slate-800">ความคืบหน้าแยกตามวิชา (กดเพื่อกรองดูเฉพาะวิชา)</h2>
+      </div>
+      <div id="subjectFilterBar" class="flex flex-wrap gap-2"></div>
+    </section>
+
+    <!-- Reschedule & Control Panel -->
+    <section class="glass-card rounded-3xl p-4 sm:p-5 space-y-4">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <!-- Rebalance Remaining Episodes -->
+        <div class="bg-indigo-50/70 border border-indigo-100 rounded-2xl p-3.5 flex flex-wrap items-center gap-3">
+          <div>
+            <div class="text-xs font-bold text-indigo-950">ไม่ได้เข้าเว็บหลายวัน หรืออยากจัดตอนใหม่?</div>
+            <div id="rebalanceDescLabel" class="text-[11px] text-indigo-700 mt-0.5">เอาเฉพาะตอนที่ยังไม่อ่าน มาจัดเรียงใหม่ตั้งแต่วันที่เลือกถึง 20 พ.ย.</div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 ml-auto">
+            <select id="startDateSelect" class="px-2.5 py-1.5 text-xs font-semibold bg-white border border-indigo-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="auto">เริ่มตั้งแต่: วันนี้ (อัตโนมัติ)</option>
+              <option value="2026-11-13">เริ่มตั้งแต่: ศ. 13 พ.ย.</option>
+              <option value="2026-11-14">เริ่มตั้งแต่: ส. 14 พ.ย.</option>
+              <option value="2026-11-15">เริ่มตั้งแต่: อา. 15 พ.ย.</option>
+              <option value="2026-11-16">เริ่มตั้งแต่: จ. 16 พ.ย.</option>
+              <option value="2026-11-17">เริ่มตั้งแต่: อ. 17 พ.ย.</option>
+              <option value="2026-11-18">เริ่มตั้งแต่: พ. 18 พ.ย.</option>
+              <option value="2026-11-19">เริ่มตั้งแต่: พฤ. 19 พ.ย.</option>
+              <option value="2026-11-20">เริ่มตั้งแต่: ศ. 20 พ.ย.</option>
+            </select>
+            <button id="rebalanceBtn" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              จัดตอนใหม่ตอนนี้
+            </button>
+          </div>
+        </div>
+
+        <!-- Compact Live Timer -->
+        <div class="bg-slate-900 text-white rounded-2xl px-4 py-2.5 flex items-center justify-between sm:justify-start gap-3 shrink-0">
+          <div>
+            <div class="text-[10px] uppercase tracking-wider text-slate-400">จับเวลาอ่าน</div>
+            <div id="timerDisplay" class="text-lg sm:text-xl font-bold tabular-nums">00:00:00</div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button id="timerToggleBtn" type="button" class="px-3 py-1.5 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-xs font-semibold transition">เริ่ม</button>
+            <button id="timerResetBtn" type="button" class="px-2 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition">รีเซ็ต</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day Toggle Bar & Search/Filter -->
+      <div class="pt-3 border-t border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div class="space-y-2">
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+            <span class="font-semibold text-slate-700">เลือกวันที่ว่างอ่าน (กดปิดวันที่ไม่ว่างได้):</span>
+            <span class="text-slate-500">เปิดใช้งาน <span id="activeDaysCountText" class="font-bold text-indigo-600">8 วัน</span> • เฉลี่ย <span id="avgPerDayText" class="font-bold text-slate-800">0 ชม. 0 นาที/วัน</span></span>
+          </div>
+          <div id="daySelectorBar" class="flex flex-wrap gap-1.5"></div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <input id="searchInput" type="text" placeholder="ค้นหาชื่อตอน..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 w-40 sm:w-44" />
+          <div class="inline-flex rounded-xl bg-slate-100 p-1 text-xs font-medium">
+            <button type="button" data-filter="all" class="filter-btn px-2.5 py-1 rounded-lg bg-white text-slate-900 shadow-xs transition">ทั้งหมด</button>
+            <button type="button" data-filter="todo" class="filter-btn px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">ยังไม่จบ</button>
+            <button type="button" data-filter="done" class="filter-btn px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">อ่านแล้ว</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Day-by-Day Schedule List -->
+    <section id="scheduleContainer" class="space-y-4"></section>
+
+    <!-- Completed Episodes Summary -->
+    <section id="completedSection" class="hidden"></section>
+  </main>
+
+  <!-- Modal: Import -->
+  <div id="importModal" class="fixed inset-0 z-40 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="glass-modal rounded-3xl max-w-lg w-full p-5">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-base font-bold text-slate-900">วางข้อมูลตอนจาก Google Sheets</h3>
+        <button id="closeImportModal" type="button" class="text-slate-400 hover:text-slate-600 p-1">✕</button>
+      </div>
+      <p class="text-xs text-slate-500 mb-3 leading-relaxed">
+        รองรับทั้งแบบมีคอลัมน์วิชา:<br />
+        • <span class="font-semibold text-slate-700">ลำดับ | วิชา | ชื่อเรื่อง | เวลา (นาที)</span><br />
+        • หรือ <span class="font-semibold text-slate-700">วิชา | ชื่อเรื่อง | เวลา (นาที)</span> หรือ <span class="font-semibold text-slate-700">ลำดับ | ชื่อเรื่อง | เวลา (นาที)</span>
+      </p>
+      <textarea id="importTextarea" rows="6" placeholder="1&#9;วิชากฎหมาย&#9;บทที่ 1 ...&#9;25" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono"></textarea>
+      <div class="flex items-center justify-between mt-3">
+        <label class="inline-flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+          <input id="importReplaceCheck" type="checkbox" checked class="rounded border-slate-300 text-indigo-600" />
+          แทนที่รายการเดิมทั้งหมด
+        </label>
+        <div class="flex gap-2">
+          <button id="cancelImportModal" type="button" class="px-3.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-xl">ยกเลิก</button>
+          <button id="confirmImportBtn" type="button" class="px-3.5 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl">นำเข้า</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirm Reset -->
+  <div id="resetModal" class="fixed inset-0 z-40 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="glass-modal rounded-3xl max-w-sm w-full p-5">
+      <h3 class="text-base font-bold text-slate-900 mb-1">ล้างการติ๊กทั้งหมด?</h3>
+      <p class="text-xs text-slate-500 mb-4">รายการตอนทั้งหมดจะยังอยู่ครบ แต่สถานะการอ่านจะถูกรีเซ็ตกลับเป็นยังไม่ได้อ่าน</p>
+      <div class="flex justify-end gap-2">
+        <button id="cancelResetBtn" type="button" class="px-3.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-xl">ยกเลิก</button>
+        <button id="confirmResetBtn" type="button" class="px-3.5 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl">ยืนยันล้าง</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'nai_police_planner_v5';
+
+    const INITIAL_EPISODES = [
+      { id: 'ep_1', seq: 1, subject: 'วิชากฏหมาย', title: 'บทที่ 5 กฏหมายแพ่ง (ทรัพย์) Part 5', mins: 31 },
+      { id: 'ep_2', seq: 2, subject: 'วิชากฏหมาย', title: 'บทที่ 6 กฏหมายแพ่ง (สัญญา) Part 1', mins: 27 },
+      { id: 'ep_3', seq: 3, subject: 'วิชากฏหมาย', title: 'บทที่ 6 กฏหมายแพ่ง (สัญญา) Part 2', mins: 37 },
+      { id: 'ep_4', seq: 4, subject: 'วิชากฏหมาย', title: 'บทที่ 6 กฏหมายแพ่ง (สัญญา) Part 3', mins: 32 },
+      { id: 'ep_5', seq: 5, subject: 'วิชากฏหมาย', title: 'บทที่ 6 กฏหมายแพ่ง (สัญญา) Part 4', mins: 33 },
+      { id: 'ep_6', seq: 6, subject: 'วิชากฏหมาย', title: 'บทที่ 7 กฏหมายแพ่ง (ครอบครัว) Part 1', mins: 32 },
+      { id: 'ep_7', seq: 7, subject: 'วิชากฏหมาย', title: 'บทที่ 7 กฏหมายแพ่ง (ครอบครัว) Part 2', mins: 39 },
+      { id: 'ep_8', seq: 8, subject: 'วิชากฏหมาย', title: 'บทที่ 7 กฏหมายแพ่ง (ครอบครัว) Part 3', mins: 42 },
+      { id: 'ep_9', seq: 9, subject: 'วิชากฏหมาย', title: 'บทที่ 7 กฏหมายแพ่ง (ครอบครัว) Part 4', mins: 23 },
+      { id: 'ep_10', seq: 10, subject: 'วิชากฏหมาย', title: 'บทที่ 8 กฏหมายอาญา (โทษ) Part 1', mins: 17 },
+      { id: 'ep_11', seq: 11, subject: 'วิชากฏหมาย', title: 'บทที่ 8 กฏหมายอาญา (โทษ) Part 2', mins: 27 },
+      { id: 'ep_12', seq: 12, subject: 'วิชากฏหมาย', title: 'บทที่ 8 กฏหมายอาญา (โทษ) Part 3', mins: 32 },
+      { id: 'ep_13', seq: 13, subject: 'วิชากฏหมาย', title: 'บทที่ 8 กฏหมายอาญา (โทษ) Part 4', mins: 36 },
+      { id: 'ep_14', seq: 14, subject: 'วิชากฏหมาย', title: 'บทที่ 8 กฏหมายอาญา (โทษ) Part 5', mins: 16 },
+      { id: 'ep_15', seq: 15, subject: 'วิชากฏหมาย', title: 'บทที่ 9 กฏหมายอาญา (บุคคล) Part 1', mins: 18 },
+      { id: 'ep_16', seq: 16, subject: 'วิชากฏหมาย', title: 'บทที่ 9 กฏหมายอาญา (บุคคล) Part 2', mins: 23 },
+      { id: 'ep_17', seq: 17, subject: 'วิชากฏหมาย', title: 'บทที่ 9 กฏหมายอาญา (บุคคล) Part 3', mins: 10 },
+      { id: 'ep_18', seq: 18, subject: 'วิชากฏหมาย', title: 'บทที่ 10 กฏหมาย (แรงงาน) Part 1', mins: 22 },
+      { id: 'ep_19', seq: 19, subject: 'วิชากฏหมาย', title: 'บทที่ 10 กฏหมาย (แรงงาน) Part 2', mins: 15 },
+      { id: 'ep_20', seq: 20, subject: 'วิชากฏหมาย', title: 'บทที่ 10 กฏหมาย (แรงงาน) Part 3', mins: 5 },
+      { id: 'ep_21', seq: 21, subject: 'วิชากฏหมาย', title: 'บทที่ 11 กฏหมาย (ในชีวิตประจำวัน) Part 1', mins: 27 },
+      { id: 'ep_22', seq: 22, subject: 'วิชากฏหมาย', title: 'บทที่ 11 กฏหมาย (ในชีวิตประจำวัน) Part 2', mins: 9 },
+      { id: 'ep_24', seq: 23, subject: 'วิชากฏหมาย', title: 'ตลุยโจทย์ท้ายวิชากฏหมาย ชุดที่ 1', mins: 14 },
+      { id: 'ep_25', seq: 24, subject: 'วิชากฏหมาย', title: 'ตลุยโจทย์ท้ายวิชากฏหมาย ชุดที่ 2', mins: 13 },
+      { id: 'ep_26', seq: 25, subject: 'วิชากฏหมาย', title: 'ตลุยโจทย์ท้ายวิชากฏหมาย ชุดที่ 3', mins: 18 },
+      { id: 'ep_27', seq: 26, subject: 'วิชางานสารบัญ', title: 'ภาพรวม วิชางานสารบัญ', mins: 4 },
+      { id: 'ep_28', seq: 27, subject: 'วิชางานสารบัญ', title: 'บทที่ 1 บทนำและนิยาม Part 1', mins: 28 },
+      { id: 'ep_29', seq: 28, subject: 'วิชางานสารบัญ', title: 'บทที่ 1 บทนำและนิยาม Part 2', mins: 22 },
+      { id: 'ep_30', seq: 29, subject: 'วิชางานสารบัญ', title: 'บทที่ 2 มาตราฐานแบบพิมพ์ ตราครุฑ', mins: 45 },
+      { id: 'ep_31', seq: 30, subject: 'วิชางานสารบัญ', title: 'บทที่ 3 หนังสือภายนอก หนังสือภายใน Part 1', mins: 43 },
+      { id: 'ep_32', seq: 31, subject: 'วิชางานสารบัญ', title: 'บทที่ 3 หนังสือภายนอก หนังสือภายใน Part 2', mins: 22 },
+      { id: 'ep_33', seq: 32, subject: 'วิชางานสารบัญ', title: 'บทที่ 3 หนังสือภายนอก หนังสือภายใน Part 3', mins: 29 },
+      { id: 'ep_34', seq: 33, subject: 'วิชางานสารบัญ', title: 'บทที่ 4 หนังสือสั่งการ', mins: 39 },
+      { id: 'ep_35', seq: 34, subject: 'วิชางานสารบัญ', title: 'บทที่ 5 หนังสือประชาสัมพันธ์', mins: 37 },
+      { id: 'ep_36', seq: 35, subject: 'วิชางานสารบัญ', title: 'บทที่ 6 หนังสือที่เจ้าหน้าที่จัดทำขึ้น', mins: 34 },
+      { id: 'ep_37', seq: 36, subject: 'วิชางานสารบัญ', title: 'บทที่ 7 เบ็ดเตล็ด', mins: 45 },
+      { id: 'ep_38', seq: 37, subject: 'วิชางานสารบัญ', title: 'บทที่ 8 การรับส่งหนังสือ Part 1', mins: 27 },
+      { id: 'ep_39', seq: 38, subject: 'วิชางานสารบัญ', title: 'บทที่ 8 การรับส่งหนังสือ Part 2', mins: 20 },
+      { id: 'ep_40', seq: 39, subject: 'วิชางานสารบัญ', title: 'บทที่ 9 การเก็บรักษา Part 1', mins: 33 },
+      { id: 'ep_41', seq: 40, subject: 'วิชางานสารบัญ', title: 'บทที่ 9 การเก็บรักษา Part 2', mins: 19 },
+      { id: 'ep_42', seq: 41, subject: 'วิชางานสารบัญ', title: 'บทที่ 10 การยืม', mins: 25 },
+      { id: 'ep_43', seq: 42, subject: 'วิชางานสารบัญ', title: 'บทที่ 11 การทำลาย Part 1', mins: 15 },
+      { id: 'ep_44', seq: 43, subject: 'วิชางานสารบัญ', title: 'บทที่ 11 การทำลาย Part 2', mins: 19 },
+      { id: 'ep_45', seq: 44, subject: 'วิชางานสารบัญ', title: 'บทที่ 12 ระบบสารบรรณอิเล็กทรอนิกส์ Part 1', mins: 32 },
+      { id: 'ep_46', seq: 45, subject: 'วิชางานสารบัญ', title: 'บทที่ 12 ระบบสารบรรณอิเล็กทรอนิกส์ Part 2', mins: 30 },
+      { id: 'ep_47', seq: 46, subject: 'วิชางานสารบัญ', title: 'บทที่ 12 ระบบสารบรรณอิเล็กทรอนิกส์ Part 3', mins: 26 },
+      { id: 'ep_48', seq: 47, subject: 'วิชางานสารบัญ', title: 'ตะลุยโจทย์ท้ายวิชาสารบรรณ ชุดที่ 1', mins: 31 },
+      { id: 'ep_49', seq: 48, subject: 'วิชางานสารบัญ', title: 'ตะลุยโจทย์ท้ายวิชาสารบรรณ ชุดที่ 2', mins: 33 },
+      { id: 'ep_50', seq: 49, subject: 'วิชางานสารบัญ', title: 'ตะลุยโจทย์ท้ายวิชาสารบรรณ ชุดที่ 3', mins: 34 },
+      { id: 'ep_51', seq: 50, subject: 'วิชาลักษณะที่ 54', title: 'ภาพรวม วิชาลักษณะที่ 54', mins: 4 },
+      { id: 'ep_52', seq: 51, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 1 งานสารบัญตำรวจ Part 1', mins: 16 },
+      { id: 'ep_53', seq: 52, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 1 งานสารบัญตำรวจ Part 2', mins: 15 },
+      { id: 'ep_54', seq: 53, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 2 การใช้บันทึกข้อความ Part 1', mins: 21 },
+      { id: 'ep_55', seq: 54, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 2 การใช้บันทึกข้อความ Part 2', mins: 10 },
+      { id: 'ep_56', seq: 55, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 3 การจัดทำหนังสือ Part 1', mins: 20 },
+      { id: 'ep_57', seq: 56, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 3 การจัดทำหนังสือ Part 2', mins: 16 },
+      { id: 'ep_58', seq: 57, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 4 การนำเสนองาน', mins: 13 },
+      { id: 'ep_59', seq: 58, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 5 การรับและส่งหนังสือ Part 1', mins: 14 },
+      { id: 'ep_60', seq: 59, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 5 การรับและส่งหนังสือ Part 2', mins: 8 },
+      { id: 'ep_61', seq: 60, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 6 การคัดลอกสำเนา Part 1', mins: 13 },
+      { id: 'ep_62', seq: 61, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 6 การคัดลอกสำเนา Part 2', mins: 7 },
+      { id: 'ep_63', seq: 62, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 7 กำหนดเลขที่ประจำหน่วยงาน Part 1', mins: 25 },
+      { id: 'ep_64', seq: 63, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 7 กำหนดเลขที่ประจำหน่วยงาน Part 2', mins: 22 },
+      { id: 'ep_65', seq: 64, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 8 การใช้คำย่อในราชการตำรวจ Part 1', mins: 23 },
+      { id: 'ep_66', seq: 65, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 8 การใช้คำย่อในราชการตำรวจ Part 2', mins: 21 },
+      { id: 'ep_67', seq: 66, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 9 การบัญญัติศัพท์อังกฤษ Part 1', mins: 19 },
+      { id: 'ep_68', seq: 67, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 9 การบัญญัติศัพท์อังกฤษ Part 2', mins: 13 },
+      { id: 'ep_69', seq: 68, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 10 การออกประกาศ', mins: 18 },
+      { id: 'ep_70', seq: 69, subject: 'วิชาลักษณะที่ 54', title: 'บทที่ 11 ไปรษณีย์', mins: 22 }
+    ];
+
+    // Prior completed subjects + Law offset (21 completed before #1 in planner, so #1 = Law ep 22/46)
+    const PRIOR_SUBJECTS = [
+      { name: 'บทนำ', done: 4, total: 4 },
+      { name: 'คอร์สตั้งไข่', done: 13, total: 13 },
+      { name: 'ความสามารถทั่วไป', done: 50, total: 50 },
+      { name: 'ภาษาไทย', done: 35, total: 35 },
+      { name: 'ภาษาอังกฤษ', done: 24, total: 24 },
+      { name: 'คอมพิวเตอร์', done: 38, total: 38 }
+    ];
+    const LAW_PRIOR_DONE = 21; // ตอนที่ 1-21 เรียนจบแล้ว, ตอนที่ 22 คือ #1 ในตาราง
+
+    const ALL_POSSIBLE_DAYS = [
+      { key: '2026-11-13', short: 'ศ. 13 พ.ย.', full: 'วันศุกร์ที่ 13 พ.ย. 2569' },
+      { key: '2026-11-14', short: 'ส. 14 พ.ย.', full: 'วันเสาร์ที่ 14 พ.ย. 2569' },
+      { key: '2026-11-15', short: 'อา. 15 พ.ย.', full: 'วันอาทิตย์ที่ 15 พ.ย. 2569' },
+      { key: '2026-11-16', short: 'จ. 16 พ.ย.', full: 'วันจันทร์ที่ 16 พ.ย. 2569' },
+      { key: '2026-11-17', short: 'อ. 17 พ.ย.', full: 'วันอังคารที่ 17 พ.ย. 2569' },
+      { key: '2026-11-18', short: 'พ. 18 พ.ย.', full: 'วันพุธที่ 18 พ.ย. 2569' },
+      { key: '2026-11-19', short: 'พฤ. 19 พ.ย.', full: 'วันพฤหัสบดีที่ 19 พ.ย. 2569' },
+      { key: '2026-11-20', short: 'ศ. 20 พ.ย.', full: 'วันศุกร์ที่ 20 พ.ย. 2569' },
+      { key: '2026-11-21', short: 'ส. 21 พ.ย.', full: 'วันเสาร์ที่ 21 พ.ย. 2569' },
+      { key: '2026-11-22', short: 'อา. 22 พ.ย.', full: 'วันอาทิตย์ที่ 22 พ.ย. 2569' }
+    ];
+    const BASE_DAYS_COUNT = 8; // 13-20 พ.ย.
+    function getStudyDays() {
+      const count = Math.min(ALL_POSSIBLE_DAYS.length, BASE_DAYS_COUNT + Math.max(0, Number(state.extraDaysCount) || 0));
+      return ALL_POSSIBLE_DAYS.slice(0, count);
+    }
+
+    const SUBJECT_BADGE_COLORS = [
+      'bg-sky-100 text-sky-800 border-sky-300',
+      'bg-violet-100 text-violet-800 border-violet-300',
+      'bg-amber-100 text-amber-800 border-amber-300',
+      'bg-teal-100 text-teal-800 border-teal-300',
+      'bg-pink-100 text-pink-800 border-pink-300'
+    ];
+    const SUBJECT_BORDER_COLORS = [
+      'border-l-4 border-l-sky-500',
+      'border-l-4 border-l-violet-500',
+      'border-l-4 border-l-amber-500',
+      'border-l-4 border-l-teal-500',
+      'border-l-4 border-l-pink-500'
+    ];
+
+    function getSubjectColorClass(subjectName, subjectList) {
+      const idx = subjectList.indexOf(subjectName);
+      return SUBJECT_BADGE_COLORS[(idx >= 0 ? idx : 0) % SUBJECT_BADGE_COLORS.length];
+    }
+    function getSubjectBorderClass(subjectName, subjectList) {
+      const idx = subjectList.indexOf(subjectName);
+      return SUBJECT_BORDER_COLORS[(idx >= 0 ? idx : 0) % SUBJECT_BORDER_COLORS.length];
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const p = JSON.parse(raw);
+          return {
+            episodes: Array.isArray(p.episodes) ? p.episodes : INITIAL_EPISODES.map(e => ({ ...e, done: false, doneDate: null })),
+            disabledDays: Array.isArray(p.disabledDays) ? p.disabledDays : [],
+            extraDaysCount: Number.isFinite(p.extraDaysCount) ? Math.min(2, Math.max(0, p.extraDaysCount)) : 0,
+            startDateMode: p.startDateMode || 'auto',
+            rebalanceMode: Boolean(p.rebalanceMode),
+            filter: p.filter || 'all',
+            subjectFilter: p.subjectFilter || 'all',
+            search: '',
+            showCompletedList: false,
+            showAllSubjects: false
+          };
+        }
+      } catch {}
+      return {
+        episodes: INITIAL_EPISODES.map(e => ({ ...e, done: false, doneDate: null })),
+        disabledDays: [],
+        extraDaysCount: 0,
+        startDateMode: 'auto',
+        rebalanceMode: false,
+        filter: 'all',
+        subjectFilter: 'all',
+        search: '',
+        showCompletedList: false,
+            showAllSubjects: false
+      };
+    }
+
+    let state = loadState();
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          episodes: state.episodes,
+          disabledDays: state.disabledDays,
+          extraDaysCount: state.extraDaysCount,
+          startDateMode: state.startDateMode,
+          rebalanceMode: state.rebalanceMode,
+          filter: state.filter,
+          subjectFilter: state.subjectFilter
+        }));
+      } catch {}
+    }
+
+    function formatHoursMins(totalMins) {
+      const safe = Math.max(0, Math.round(totalMins));
+      const h = Math.floor(safe / 60);
+      const m = safe % 60;
+      return `${h} ชม. ${m} นาที`;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      el.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.add('hidden'), 2000);
+    }
+
+    function getTodayISO() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function getEffectiveStartDate() {
+      if (state.startDateMode && state.startDateMode !== 'auto') {
+        return state.startDateMode;
+      }
+      const today = getTodayISO();
+      if (today <= '2026-11-13') return '2026-11-13';
+      const days = getStudyDays(); const lastKey = days[days.length - 1].key; if (today > lastKey) return lastKey;
+      return today;
+    }
+
+    function getActiveDays() {
+      const startKey = state.rebalanceMode ? getEffectiveStartDate() : '2026-11-13';
+      return getStudyDays().filter(d => d.key >= startKey && !state.disabledDays.includes(d.key));
+    }
+
+    function buildSchedule() {
+      const activeDays = getActiveDays();
+      if (activeDays.length === 0) return [];
+
+      const targetEpisodes = state.rebalanceMode
+        ? state.episodes.filter(e => !e.done)
+        : state.episodes;
+
+      const totalMinsTarget = targetEpisodes.reduce((sum, e) => sum + (Number(e.mins) || 0), 0);
+      const buckets = activeDays.map(d => ({ day: d, episodes: [], totalMins: 0 }));
+
+      let dayIdx = 0;
+      let cumulativeAssigned = 0;
+      const nDays = activeDays.length;
+
+      targetEpisodes.forEach(ep => {
+        const epMins = Number(ep.mins) || 0;
+        const idealCutoff = ((dayIdx + 1) / nDays) * totalMinsTarget;
+
+        if (
+          dayIdx < nDays - 1 &&
+          buckets[dayIdx].episodes.length > 0 &&
+          cumulativeAssigned + epMins / 2 > idealCutoff
+        ) {
+          dayIdx += 1;
+        }
+
+        buckets[dayIdx].episodes.push(ep);
+        buckets[dayIdx].totalMins += epMins;
+        cumulativeAssigned += epMins;
+      });
+
+      return buckets;
+    }
+
+    function render() {
+      const allSubjects = Array.from(new Set(state.episodes.map(e => e.subject || 'ทั่วไป')));
+      if (state.subjectFilter !== 'all' && !allSubjects.includes(state.subjectFilter)) {
+        state.subjectFilter = 'all';
+      }
+
+      // Overall course progress (prior subjects + Law prior + planner episodes)
+      const priorDoneSum = PRIOR_SUBJECTS.reduce((sum, item) => sum + item.done, 0) + LAW_PRIOR_DONE;
+      const priorTotalSum = PRIOR_SUBJECTS.reduce((sum, item) => sum + item.total, 0) + LAW_PRIOR_DONE;
+      const plannerDoneCount = state.episodes.filter(e => e.done).length;
+      const grandDone = priorDoneSum + plannerDoneCount;
+      const grandTotal = priorTotalSum + state.episodes.length;
+      const grandPct = grandTotal > 0 ? (grandDone / grandTotal) * 100 : 0;
+      const grandPctText = grandPct % 1 === 0 ? `${grandPct.toFixed(0)}%` : `${grandPct.toFixed(1)}%`;
+
+      document.getElementById('overallDoneText').textContent = `ติวไปแล้ว ${grandDone} / ${grandTotal} ตอน`;
+      document.getElementById('overallPctBadge').textContent = grandPctText;
+      document.getElementById('overallProgressBar').style.width = `${Math.min(100, grandPct)}%`;
+
+      const drawer = document.getElementById('allSubjectsDrawer');
+      const toggleDrawerBtn = document.getElementById('toggleAllSubjectsBtn');
+      toggleDrawerBtn.textContent = state.showAllSubjects ? 'ซ่อนสรุปทุกวิชา' : 'ดูสรุปทุกวิชา (9 หมวด)';
+      const lawEps = state.episodes.filter(e => e.subject === 'วิชากฏหมาย');
+        const lawDone = LAW_PRIOR_DONE + lawEps.filter(e => e.done).length;
+        const lawTotal = LAW_PRIOR_DONE + lawEps.length;
+
+        const sarabanEps = state.episodes.filter(e => e.subject === 'วิชางานสารบัญ');
+        const sarabanDone = sarabanEps.filter(e => e.done).length;
+
+        const lak54Eps = state.episodes.filter(e => e.subject === 'วิชาลักษณะที่ 54');
+        const lak54Done = lak54Eps.filter(e => e.done).length;
+
+        const summaryItems = [
+          ...PRIOR_SUBJECTS,
+          { name: 'วิชากฏหมาย', done: lawDone, total: lawTotal },
+          { name: 'วิชางานสารบัญ', done: sarabanDone, total: sarabanEps.length },
+          { name: 'วิชาลักษณะที่ 54', done: lak54Done, total: lak54Eps.length }
+        ];
+
+        drawer.innerHTML = summaryItems.map(item => {
+          const isFin = item.total > 0 && item.done >= item.total;
+          return `
+            <div class="rounded-xl px-3 py-2 border ${isFin ? 'bg-emerald-500/15 border-emerald-400/30' : 'bg-white/10 border-white/15'}">
+              <div class="text-[11px] font-medium text-indigo-100 truncate">${escapeHtml(item.name)}</div>
+              <div class="text-sm font-bold tabular-nums mt-0.5 ${isFin ? 'text-emerald-300' : 'text-white'}">
+                ${item.done} / ${item.total} ตอน ${isFin ? '✓' : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      if (state.showAllSubjects) {
+        drawer.classList.add('is-open');
+      } else {
+        drawer.classList.remove('is-open');
+      }
+
+      const totalCount = state.episodes.length;
+      const doneCount = state.episodes.filter(e => e.done).length;
+      const remCount = totalCount - doneCount;
+      const pct = totalCount > 0 ? (doneCount / totalCount) * 100 : 0;
+      const pctText = pct % 1 === 0 ? `${pct.toFixed(0)}%` : `${pct.toFixed(1)}%`;
+
+      const totalCourseMins = state.episodes.reduce((s, e) => s + (Number(e.mins) || 0), 0);
+      const doneCourseMins = state.episodes.filter(e => e.done).reduce((s, e) => s + (Number(e.mins) || 0), 0);
+      const remCourseMins = Math.max(0, totalCourseMins - doneCourseMins);
+
+      document.getElementById('kpiRemainingEps').textContent = `${remCount} ตอน`;
+      document.getElementById('kpiEpsSub').textContent = `อ่านแล้ว ${doneCount} / ${totalCount} ตอน`;
+      document.getElementById('kpiPercent').textContent = pctText;
+      document.getElementById('kpiProgressBar').style.width = `${Math.min(100, pct)}%`;
+      document.getElementById('kpiCourseRemaining').textContent = formatHoursMins(remCourseMins);
+      document.getElementById('kpiCourseDoneSub').textContent = `อ่านไปแล้ว ${formatHoursMins(doneCourseMins)}`;
+
+      const studyDays = getStudyDays();
+      const lastDay = studyDays[studyDays.length - 1];
+      const lastDayNum = lastDay.key.slice(-2);
+      document.getElementById('headerDeadlineLabel').textContent = `แผนอ่านแยกตามวิชา • จบภายใน ${Number(lastDayNum)} พ.ย. 2569`;
+      document.getElementById('rebalanceDescLabel').textContent = `เอาเฉพาะตอนที่ยังไม่อ่าน มาจัดเรียงใหม่ตั้งแต่วันที่เลือกถึง ${Number(lastDayNum)} พ.ย.`;
+
+      const startSel = document.getElementById('startDateSelect');
+      startSel.innerHTML = [
+        '<option value="auto">เริ่มตั้งแต่: วันนี้ (อัตโนมัติ)</option>',
+        ...studyDays.map(d => `<option value="${d.key}">เริ่มตั้งแต่: ${d.short}</option>`)
+      ].join('');
+      if (state.startDateMode !== 'auto' && !studyDays.some(d => d.key === state.startDateMode)) {
+        state.startDateMode = 'auto';
+      }
+      startSel.value = state.startDateMode;
+
+      // Render Subject Filter & Progress Bar
+      const subBar = document.getElementById('subjectFilterBar');
+      const allActive = state.subjectFilter === 'all';
+      subBar.innerHTML = [
+        `<button type="button" data-sub-filter="all" class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition ${
+          allActive ? 'bg-slate-900 text-white border-slate-900' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+        }">ทุกวิชา (${doneCount}/${totalCount})</button>`,
+        ...allSubjects.map(subName => {
+          const subEps = state.episodes.filter(e => (e.subject || 'ทั่วไป') === subName);
+          const subDone = subEps.filter(e => e.done).length;
+          const subRem = subEps.length - subDone;
+          const subRemMins = subEps.filter(e => !e.done).reduce((s, e) => s + (Number(e.mins) || 0), 0);
+          const isSel = state.subjectFilter === subName;
+          const colorCls = getSubjectColorClass(subName, allSubjects);
+          return `
+            <button type="button" data-sub-filter="${escapeHtml(subName)}" class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-2 ${
+              isSel ? 'ring-2 ring-indigo-500 ' + colorCls : colorCls + ' opacity-85 hover:opacity-100'
+            }">
+              <span>${escapeHtml(subName)}</span>
+              <span class="tabular-nums opacity-80">เหลือ ${subRem} ตอน (${formatHoursMins(subRemMins)})</span>
+            </button>
+          `;
+        })
+      ].join('');
+
+      const schedule = buildSchedule();
+      const activeDaysCount = schedule.length;
+      document.getElementById('activeDaysCountText').textContent = `${activeDaysCount} วัน`;
+      document.getElementById('avgPerDayText').textContent =
+        activeDaysCount > 0 ? `${formatHoursMins(remCourseMins / activeDaysCount)}/วัน` : 'กรุณาเปิดอย่างน้อย 1 วัน';
+
+      // Focus day KPI
+      const todayKey = getTodayISO();
+      const todayTickedMins = state.episodes
+        .filter(e => e.done && e.doneDate === todayKey)
+        .reduce((s, e) => s + (Number(e.mins) || 0), 0);
+
+      let focusBucket = schedule.find(b => b.day.key === todayKey);
+      if (!focusBucket) {
+        focusBucket = schedule.find(b => b.episodes.some(e => !e.done)) || schedule[0];
+      }
+
+      if (focusBucket) {
+        const isToday = focusBucket.day.key === todayKey;
+        document.getElementById('kpiFocusDayLabel').textContent = isToday
+          ? 'วันนี้อ่านไปแล้ว'
+          : `แผน ${focusBucket.day.short}`;
+        const bucketDoneMins = focusBucket.episodes.filter(e => e.done).reduce((s, e) => s + (Number(e.mins) || 0), 0);
+        const studiedDisplay = isToday && state.rebalanceMode ? todayTickedMins : bucketDoneMins;
+        const remDisplay = Math.max(0, focusBucket.totalMins - bucketDoneMins);
+
+        document.getElementById('kpiTodayStudied').textContent = formatHoursMins(studiedDisplay);
+        document.getElementById('kpiTodayRemainingSub').textContent =
+          remDisplay > 0 ? `เหลืออีก ${formatHoursMins(remDisplay)}` : 'ครบแผนวันนี้แล้ว!';
+      } else {
+        document.getElementById('kpiTodayStudied').textContent = formatHoursMins(todayTickedMins);
+        document.getElementById('kpiTodayRemainingSub').textContent = 'ยังไม่ได้เลือกวันอ่าน';
+      }
+
+      // Render Day Toggle Bar
+      const startLimit = state.rebalanceMode ? getEffectiveStartDate() : '2026-11-13';
+      const dayBar = document.getElementById('daySelectorBar');
+      dayBar.innerHTML = getStudyDays().map(d => {
+        const isPastSkipped = d.key < startLimit;
+        const isDisabled = state.disabledDays.includes(d.key);
+        const isToday = d.key === todayKey;
+        if (isPastSkipped) {
+          return `
+            <span class="px-2.5 py-1 rounded-xl text-xs font-medium bg-slate-100 text-slate-400 border border-slate-200">
+              ${d.short} (ผ่านแล้ว)
+            </span>
+          `;
+        }
+        return `
+          <button type="button" data-toggle-day="${d.key}" class="px-3 py-1 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 ${
+            isDisabled
+              ? 'bg-slate-50 border-slate-200 text-slate-400 line-through'
+              : 'bg-indigo-50 border-indigo-200 text-indigo-700 hover:bg-indigo-100'
+          }">
+            <span>${isDisabled ? '✕' : '✓'}</span>
+            <span>${d.short}</span>
+            ${isToday ? '<span class="px-1.5 py-0.2 bg-indigo-600 text-white rounded text-[10px]">วันนี้</span>' : ''}
+          </button>
+        `;
+      }).join('') + `
+        ${BASE_DAYS_COUNT + state.extraDaysCount < ALL_POSSIBLE_DAYS.length ? `
+          <button type="button" id="addExtraDayBtn" class="px-3 py-1 rounded-xl text-xs font-bold border border-dashed border-emerald-400 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition">
+            + เพิ่มวัน (${ALL_POSSIBLE_DAYS[BASE_DAYS_COUNT + state.extraDaysCount].short})
+          </button>
+        ` : ''}
+        ${state.extraDaysCount > 0 ? `
+          <button type="button" id="removeExtraDayBtn" class="px-2.5 py-1 rounded-xl text-xs font-semibold border border-slate-200 bg-white text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition">
+            - ลดวันล่าสุด
+          </button>
+        ` : ''}
+      `;
+
+      // Filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        const active = btn.dataset.filter === state.filter;
+        btn.className = active
+          ? 'filter-btn px-2.5 py-1 rounded-lg bg-white text-slate-900 shadow-xs transition'
+          : 'filter-btn px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
+      });
+
+      const container = document.getElementById('scheduleContainer');
+      if (schedule.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-8 text-center">
+            <p class="text-sm font-semibold text-slate-700">ยังไม่ได้เปิดวันอ่านหนังสือเลย</p>
+            <p class="text-xs text-slate-500 mt-1">กดเลือกวันด้านบน หรือเปลี่ยน "เริ่มตั้งแต่" เพื่อจัดตารางอ่านครับ</p>
+          </div>
+        `;
+      } else {
+        const q = state.search.trim().toLowerCase();
+        container.innerHTML = schedule.map((bucket, idx) => {
+          const dayTotalEps = bucket.episodes.length;
+          const dayDoneEps = bucket.episodes.filter(e => e.done).length;
+          const dayRemEps = dayTotalEps - dayDoneEps;
+          const dayDoneMins = bucket.episodes.filter(e => e.done).reduce((s, e) => s + (Number(e.mins) || 0), 0);
+          const dayRemMins = Math.max(0, bucket.totalMins - dayDoneMins);
+          const dayPct = bucket.totalMins > 0 ? Math.round((dayDoneMins / bucket.totalMins) * 100) : 0;
+          const allDayDone = dayTotalEps > 0 && dayRemEps === 0;
+          const isToday = bucket.day.key === todayKey;
+
+          const visibleEps = bucket.episodes.filter(ep => {
+            if (state.filter !== 'done' && ep.done) return false;
+            if (state.filter === 'done' && !ep.done) return false;
+            if (state.subjectFilter !== 'all' && (ep.subject || 'ทั่วไป') !== state.subjectFilter) return false;
+            if (q && !ep.title.toLowerCase().includes(q) && !(ep.subject || '').toLowerCase().includes(q) && !String(ep.seq).includes(q)) return false;
+            return true;
+          });
+
+          if ((state.subjectFilter !== 'all' || q) && visibleEps.length === 0) {
+            return '';
+          }
+
+          return `
+            <div class="glass-card rounded-3xl ${allDayDone ? 'ring-1 ring-emerald-300/60' : isToday ? 'ring-2 ring-indigo-400/50' : ''} overflow-hidden animate-in">
+              <div class="px-4 sm:px-5 py-3.5 ${allDayDone ? 'bg-emerald-50/60' : isToday ? 'bg-indigo-50/50' : 'bg-slate-50/70'} border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded-lg ${allDayDone ? 'bg-emerald-600 text-white' : 'bg-indigo-600 text-white'}">วันที่ ${idx + 1}</span>
+                    <h2 class="text-sm sm:text-base font-bold text-slate-900">${bucket.day.full}</h2>
+                    ${isToday ? '<span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">วันนี้</span>' : ''}
+                    ${allDayDone ? '<span class="text-xs font-semibold text-emerald-700">✓ อ่านครบแล้ว</span>' : ''}
+                  </div>
+                  <p class="text-xs text-slate-600 mt-1 tabular-nums">
+                    เหลือ <span class="font-bold text-slate-900">${dayRemEps}</span> / ${dayTotalEps} ตอน • อ่านแล้ว <span class="font-semibold text-indigo-600">${formatHoursMins(dayDoneMins)}</span> • เหลืออีก <span class="font-bold text-rose-600">${formatHoursMins(dayRemMins)}</span>
+                  </p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-20 sm:w-24 bg-slate-200 rounded-full h-2 overflow-hidden">
+                      <div class="${allDayDone ? 'bg-emerald-500' : 'bg-indigo-600'} h-2 rounded-full progress-smooth" style="width: ${dayPct}%"></div>
+                    </div>
+                    <span class="text-xs font-bold tabular-nums ${allDayDone ? 'text-emerald-600' : 'text-indigo-600'} w-8 text-right">${dayPct}%</span>
+                  </div>
+                  <button type="button" data-skip-day="${bucket.day.key}" class="px-2.5 py-1 text-[11px] font-semibold text-slate-500 hover:text-rose-600 hover:bg-rose-50 bg-white border border-slate-200 rounded-lg transition">
+                    ไม่ว่าง / ข้าม
+                  </button>
+                </div>
+              </div>
+
+              ${visibleEps.length === 0 ? `
+                <div class="px-5 py-3.5 text-xs font-medium ${allDayDone ? 'text-emerald-700' : 'text-slate-400'}">${allDayDone && state.filter !== 'done' ? '✓ อ่านครบทุกตอนของวันนี้แล้ว เก่งมาก!' : 'ไม่มีตอนที่ตรงกับตัวกรองในวันนี้'}</div>
+              ` : `
+                <div class="divide-y divide-slate-100">
+                  ${visibleEps.map(ep => {
+                    const subName = ep.subject || 'ทั่วไป';
+                    const badgeCls = getSubjectColorClass(subName, allSubjects);
+                    const borderCls = getSubjectBorderClass(subName, allSubjects);
+                    return `
+                      <button type="button" data-toggle-ep="${ep.id}" class="w-full text-left px-3.5 sm:px-5 py-3 flex items-center justify-between gap-3 ${borderCls} ep-row group">
+                        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+                          <span class="w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 transition ${
+                            ep.done
+                              ? 'bg-emerald-500 border-emerald-500 text-white'
+                              : 'bg-white border-slate-300 group-hover:border-indigo-500'
+                          }">
+                            ${ep.done ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>' : ''}
+                          </span>
+                          <span class="text-xs font-bold text-slate-400 tabular-nums w-6 sm:w-7 shrink-0">#${ep.seq}</span>
+                          <span class="inline-block text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-md border shrink-0 ${badgeCls}">${escapeHtml(subName)}</span>
+                          <span class="text-xs sm:text-sm font-medium ${ep.done ? 'line-through text-slate-400' : 'text-slate-800'} truncate">${escapeHtml(ep.title)}</span>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                          <span class="text-xs font-semibold tabular-nums px-2.5 py-1 rounded-lg ${ep.done ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-700'}">
+                            ${ep.mins} นาที
+                          </span>
+                        </div>
+                      </button>
+                    `;
+                  }).join('')}
+                </div>
+              `}
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Completed Episodes Summary
+      const completedEl = document.getElementById('completedSection');
+      const doneEps = state.episodes.filter(e => e.done);
+      if (doneEps.length > 0 && state.filter !== 'done') {
+        completedEl.classList.remove('hidden');
+        completedEl.innerHTML = `
+          <div class="glass-card rounded-3xl ring-1 ring-emerald-300/60 overflow-hidden">
+            <button type="button" id="toggleCompletedBtn" class="w-full px-4 sm:px-5 py-3.5 bg-emerald-50/70 flex items-center justify-between text-left">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">✓</span>
+                <span class="text-sm font-bold text-emerald-900">ตอนที่อ่านจบแล้ว (${doneEps.length} ตอน • ${formatHoursMins(doneCourseMins)})</span>
+              </div>
+              <span class="text-xs font-semibold text-emerald-700">${state.showCompletedList ? 'ซ่อน' : 'ดูรายการ'}</span>
+            </button>
+            ${state.showCompletedList ? `
+              <div class="divide-y divide-slate-100">
+                ${doneEps.map(ep => `
+                  <button type="button" data-toggle-ep="${ep.id}" class="w-full text-left px-4 sm:px-5 py-2.5 flex items-center justify-between gap-3 hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-3 min-w-0 flex-1">
+                      <span class="w-5 h-5 rounded-md bg-emerald-500 text-white flex items-center justify-center shrink-0">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      </span>
+                      <span class="text-xs font-bold text-slate-400 tabular-nums w-7 shrink-0">#${ep.seq}</span>
+                      <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md border bg-slate-50 text-slate-500 border-slate-200 shrink-0">${escapeHtml(ep.subject || 'ทั่วไป')}</span>
+                      <span class="text-xs sm:text-sm line-through text-slate-400 truncate">${escapeHtml(ep.title)}</span>
+                    </div>
+                    <span class="text-xs font-semibold tabular-nums px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 shrink-0">${ep.mins} นาที</span>
+                  </button>
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      } else {
+        completedEl.classList.add('hidden');
+        completedEl.innerHTML = '';
+      }
+    }
+
+    // Toggle All Subjects Drawer
+    document.getElementById('toggleAllSubjectsBtn').addEventListener('click', () => {
+      state.showAllSubjects = !state.showAllSubjects;
+      render();
+    });
+
+    // Subject Filter Bar Click
+    document.getElementById('subjectFilterBar').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-sub-filter]');
+      if (!btn) return;
+      state.subjectFilter = btn.dataset.subFilter;
+      saveState();
+      render();
+    });
+
+    // Episode Row Tap with smooth fade-out when marking done
+    function handleEpisodeToggle(e) {
+      const btn = e.target.closest('button[data-toggle-ep]');
+      if (!btn || btn.dataset.animating === '1') return;
+      const id = btn.dataset.toggleEp;
+      const ep = state.episodes.find(item => item.id === id);
+      if (!ep) return;
+
+      const willBeDone = !ep.done;
+      if (willBeDone && state.filter !== 'done' && !btn.closest('#completedSection')) {
+        btn.dataset.animating = '1';
+        btn.style.maxHeight = btn.offsetHeight + 'px';
+        const box = btn.querySelector('span');
+        if (box) {
+          box.className = 'w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 bg-emerald-500 border-emerald-500 text-white transition';
+          box.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>';
+        }
+        requestAnimationFrame(() => {
+          btn.classList.add('ep-leaving');
+        });
+        setTimeout(() => {
+          ep.done = true;
+          ep.doneDate = getTodayISO();
+          saveState();
+          render();
+          showToast(`อ่านจบ "${ep.title}" (+${ep.mins} นาที)`);
+        }, 310);
+        return;
+      }
+
+      ep.done = willBeDone;
+      ep.doneDate = ep.done ? getTodayISO() : null;
+      saveState();
+      render();
+      if (ep.done) {
+        showToast(`อ่านจบ "${ep.title}" (+${ep.mins} นาที)`);
+      }
+    }
+
+    document.getElementById('scheduleContainer').addEventListener('click', (e) => {
+      const skipBtn = e.target.closest('button[data-skip-day]');
+      if (skipBtn) {
+        const key = skipBtn.dataset.skipDay;
+        if (!state.disabledDays.includes(key)) {
+          state.disabledDays.push(key);
+          saveState();
+          render();
+          showToast('ข้ามวันนี้และเกลี่ยตอนไปวันอื่นแล้ว');
+        }
+        return;
+      }
+      handleEpisodeToggle(e);
+    });
+
+    document.getElementById('completedSection').addEventListener('click', (e) => {
+      if (e.target.closest('#toggleCompletedBtn')) {
+        state.showCompletedList = !state.showCompletedList;
+        render();
+        return;
+      }
+      handleEpisodeToggle(e);
+    });
+
+    // Rebalance Button & Start Date
+    document.getElementById('startDateSelect').addEventListener('change', (e) => {
+      state.startDateMode = e.target.value;
+      state.rebalanceMode = true;
+      saveState();
+      render();
+      showToast('อัปเดตวันเริ่มต้นและจัดตอนที่เหลือใหม่แล้ว');
+    });
+
+    document.getElementById('rebalanceBtn').addEventListener('click', () => {
+      state.rebalanceMode = true;
+      saveState();
+      render();
+      const rem = state.episodes.filter(e => !e.done).length;
+      showToast(`จัด ${rem} ตอนที่เหลือลงตารางใหม่เรียบร้อย!`);
+    });
+
+    // Day Toggle Bar
+    document.getElementById('daySelectorBar').addEventListener('click', (e) => {
+      if (e.target.closest('#addExtraDayBtn')) {
+        if (BASE_DAYS_COUNT + state.extraDaysCount < ALL_POSSIBLE_DAYS.length) {
+          const addedDay = ALL_POSSIBLE_DAYS[BASE_DAYS_COUNT + state.extraDaysCount];
+          state.extraDaysCount += 1;
+          saveState();
+          render();
+          showToast(`เพิ่มวันอ่าน "${addedDay.short}" และเกลี่ยตอนใหม่แล้ว`);
+        }
+        return;
+      }
+      if (e.target.closest('#removeExtraDayBtn')) {
+        if (state.extraDaysCount > 0) {
+          state.extraDaysCount -= 1;
+          const validKeys = new Set(getStudyDays().map(d => d.key));
+          state.disabledDays = state.disabledDays.filter(k => validKeys.has(k));
+          saveState();
+          render();
+          showToast('ลดวันอ่านที่เพิ่มมาแล้ว');
+        }
+        return;
+      }
+      const btn = e.target.closest('button[data-toggle-day]');
+      if (!btn) return;
+      const key = btn.dataset.toggleDay;
+      if (state.disabledDays.includes(key)) {
+        state.disabledDays = state.disabledDays.filter(k => k !== key);
+      } else {
+        state.disabledDays.push(key);
+      }
+      saveState();
+      render();
+      showToast('อัปเดตวันอ่านและจัดตอนใหม่แล้ว');
+    });
+
+    // Filters & Search
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.filter = btn.dataset.filter;
+        saveState();
+        render();
+      });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      state.search = e.target.value;
+      render();
+    });
+
+    // Stopwatch
+    let timerRunning = false;
+    let timerSeconds = 0;
+    let timerInterval = null;
+
+    function updateTimerDisplay() {
+      const h = Math.floor(timerSeconds / 3600);
+      const m = Math.floor((timerSeconds % 3600) / 60);
+      const s = timerSeconds % 60;
+      document.getElementById('timerDisplay').textContent =
+        `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    document.getElementById('timerToggleBtn').addEventListener('click', () => {
+      const btn = document.getElementById('timerToggleBtn');
+      if (!timerRunning) {
+        timerRunning = true;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          timerSeconds += 1;
+          updateTimerDisplay();
+        }, 1000);
+        btn.textContent = 'พัก';
+        btn.classList.remove('bg-indigo-500', 'hover:bg-indigo-400');
+        btn.classList.add('bg-amber-500', 'hover:bg-amber-400');
+      } else {
+        timerRunning = false;
+        clearInterval(timerInterval);
+        btn.textContent = 'ต่อ';
+        btn.classList.remove('bg-amber-500', 'hover:bg-amber-400');
+        btn.classList.add('bg-indigo-500', 'hover:bg-indigo-400');
+      }
+    });
+
+    document.getElementById('timerResetBtn').addEventListener('click', () => {
+      timerRunning = false;
+      clearInterval(timerInterval);
+      timerSeconds = 0;
+      updateTimerDisplay();
+      const btn = document.getElementById('timerToggleBtn');
+      btn.textContent = 'เริ่ม';
+      btn.classList.remove('bg-amber-500', 'hover:bg-amber-400');
+      btn.classList.add('bg-indigo-500', 'hover:bg-indigo-400');
+    });
+
+    // Import Modal (supports 4 cols: seq|subject|title|mins, or 3 cols: subject|title|mins or seq|title|mins, or 2 cols: title|mins)
+    const importModal = document.getElementById('importModal');
+    document.getElementById('openImportBtn').addEventListener('click', () => importModal.classList.remove('hidden'));
+    document.getElementById('closeImportModal').addEventListener('click', () => importModal.classList.add('hidden'));
+    document.getElementById('cancelImportModal').addEventListener('click', () => importModal.classList.add('hidden'));
+
+    document.getElementById('confirmImportBtn').addEventListener('click', () => {
+      const raw = document.getElementById('importTextarea').value.trim();
+      if (!raw) {
+        showToast('กรุณาวางข้อมูลก่อนครับ');
+        return;
+      }
+      const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      const added = [];
+      lines.forEach((line, idx) => {
+        const parts = line.includes('\t') ? line.split('\t') : line.split(',');
+        if (parts.length < 2) return;
+        let seq, subject, title, mins;
+
+        if (parts.length >= 4) {
+          seq = !isNaN(parseInt(parts[0], 10)) ? parseInt(parts[0], 10) : (idx + 1);
+          subject = parts[1].trim() || 'ทั่วไป';
+          title = parts[2].trim();
+          mins = parseInt(parts[3], 10);
+        } else if (parts.length === 3) {
+          if (!isNaN(parseInt(parts[0], 10))) {
+            seq = parseInt(parts[0], 10);
+            subject = 'ทั่วไป';
+            title = parts[1].trim();
+            mins = parseInt(parts[2], 10);
+          } else {
+            seq = state.episodes.length + added.length + 1;
+            subject = parts[0].trim() || 'ทั่วไป';
+            title = parts[1].trim();
+            mins = parseInt(parts[2], 10);
+          }
+        } else {
+          seq = state.episodes.length + added.length + 1;
+          subject = 'ทั่วไป';
+          title = parts[0].trim();
+          mins = parseInt(parts[1], 10);
+        }
+
+        if (!title || isNaN(mins) || mins <= 0) return;
+        added.push({
+          id: 'imp_' + Date.now() + '_' + idx,
+          seq,
+          subject,
+          title,
+          mins,
+          done: false,
+          doneDate: null
+        });
+      });
+
+      if (added.length === 0) {
+        showToast('ไม่พบข้อมูลที่รูปแบบถูกต้อง');
+        return;
+      }
+      if (document.getElementById('importReplaceCheck').checked) {
+        state.episodes = added;
+      } else {
+        state.episodes = state.episodes.concat(added);
+      }
+      document.getElementById('importTextarea').value = '';
+      importModal.classList.add('hidden');
+      saveState();
+      render();
+      showToast(`นำเข้า ${added.length} ตอนเรียบร้อย`);
+    });
+
+    // Reset Checkmarks Modal
+    const resetModal = document.getElementById('resetModal');
+    document.getElementById('openResetBtn').addEventListener('click', () => resetModal.classList.remove('hidden'));
+    document.getElementById('cancelResetBtn').addEventListener('click', () => resetModal.classList.add('hidden'));
+    document.getElementById('confirmResetBtn').addEventListener('click', () => {
+      state.episodes.forEach(e => { e.done = false; e.doneDate = null; });
+      state.rebalanceMode = false;
+      state.startDateMode = 'auto';
+      state.disabledDays = [];
+      state.extraDaysCount = 0;
+      state.subjectFilter = 'all';
+      resetModal.classList.add('hidden');
+      saveState();
+      render();
+      showToast('ล้างการติ๊กและจัดตารางเริ่มต้นใหม่แล้ว');
+    });
+
+    render();
+  </script>
+</body>
+</html>
